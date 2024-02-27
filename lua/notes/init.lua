@@ -1,3 +1,4 @@
+local actions = require('notes.actions')
 local builtin = require('telescope.builtin')
 local make_entry = require('notes.make_entry')
 
@@ -50,6 +51,28 @@ function M.open(opts)
     find_command = { 'fd', '-e', 'md' },
     prompt_title = 'Open Note',
     entry_maker = make_entry.gen_from_note(opts)
+  }
+end
+
+function M.insert_link(opts)
+  opts = opts or {}
+
+  opts.dir = opts.dir or M.config.dir
+
+  if vim.fn.isdirectory(vim.fn.expand(opts.dir)) == 0 then
+    vim.notify('Directory "' .. opts.dir .. '" does not exist', vim.log.levels.ERROR)
+    return
+  end
+
+  builtin.find_files {
+    cwd = opts.dir,
+    find_command = { 'fd', '-e', 'md' },
+    prompt_title = 'Insert Link',
+    entry_maker = make_entry.gen_from_note(opts),
+    attach_mappings = function(_, _)
+      actions.select_default:replace(actions.insert_link)
+      return true
+    end
   }
 end
 
