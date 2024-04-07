@@ -25,8 +25,20 @@ function make_entry.gen_from_note(opts)
     note.filename = entry
     note.path = vim.fn.expand(opts.dir .. '/' .. entry)
 
-    local json = vim.fn.system({ 'yq', '--front-matter=extract', note.path, '-o', 'json' })
-    local metadata = vim.json.decode(json, { luanil = { object = true, array = true } })
+    local lines = {}
+    local in_frontmatter = false
+    for line in io.lines(note.path) do
+      if not in_frontmatter and line:match('^---+$') then
+        in_frontmatter = true
+      elseif in_frontmatter and line:match('^---+$') then
+        break
+      end
+
+      table.insert(lines, line)
+    end
+
+    local frontmatter = table.concat(lines, '\n')
+    local metadata = require('yaml').load(frontmatter)
 
     if metadata == nil then
       return
