@@ -10,7 +10,7 @@ function M.setup(opts)
   M.config = vim.tbl_extend('force', M.config, opts or {})
 end
 
-function M.new(opts)
+function M.new_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
@@ -36,7 +36,7 @@ tags: []
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
 end
 
-function M.open(opts)
+function M.open_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
@@ -51,6 +51,22 @@ function M.open(opts)
     find_command = { 'fd', '-e', 'md' },
     prompt_title = 'Open Note',
     entry_maker = make_entry.gen_from_note(opts)
+  }
+end
+
+function M.search_notes(opts)
+  opts = opts or {}
+
+  opts.dir = opts.dir or M.config.dir
+
+  if vim.fn.isdirectory(vim.fn.expand(opts.dir)) == 0 then
+    vim.notify('Directory "' .. opts.dir .. '" does not exist', vim.log.levels.ERROR)
+    return
+  end
+
+  builtin.live_grep {
+    cwd = opts.dir,
+    prompt_title = 'Search Notes'
   }
 end
 

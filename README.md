@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- [fd](https://github.com/sharkdp/fd)
+- [fd](https://github.com/sharkdp/fd) - A simple, fast and user-friendly alternative to 'find'
 
 ## Installation
 
@@ -37,8 +37,9 @@ asdf global lua 5.1.5
       dir = '~/notes'
     }
 
-    vim.keymap.set('n', '<leader>nn', require('notes').new)
-    vim.keymap.set('n', '<leader>no', require('notes').open)
+    vim.keymap.set('n', '<leader>nn', require('notes').new_note)
+    vim.keymap.set('n', '<leader>no', require('notes').open_note)
+    vim.keymap.set('n', '<leader>ng', require('notes').search_notes)
   end
 }
 ```
