@@ -32,9 +32,9 @@ function make_entry.gen_from_note(opts)
         in_frontmatter = true
       elseif in_frontmatter and line:match('^---+$') then
         break
+      elseif in_frontmatter then
+        table.insert(lines, line)
       end
-
-      table.insert(lines, line)
     end
 
     local frontmatter = table.concat(lines, '\n')
