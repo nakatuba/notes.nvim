@@ -54,22 +54,6 @@ function M.open_note(opts)
   }
 end
 
-function M.search_notes(opts)
-  opts = opts or {}
-
-  opts.dir = opts.dir or M.config.dir
-
-  if vim.fn.isdirectory(vim.fn.expand(opts.dir)) == 0 then
-    vim.notify('Directory "' .. opts.dir .. '" does not exist', vim.log.levels.ERROR)
-    return
-  end
-
-  builtin.live_grep {
-    cwd = opts.dir,
-    prompt_title = 'Search Notes'
-  }
-end
-
 function M.insert_link(opts)
   opts = opts or {}
 
