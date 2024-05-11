@@ -40,13 +40,8 @@ function make_entry.gen_from_note(opts)
     local frontmatter = table.concat(lines, '\n')
     local metadata = require('yaml').load(frontmatter)
 
-    if metadata == nil then
-      return
-    end
-
-    for k, v in pairs(metadata) do
-      note[k] = v
-    end
+    note.title = metadata and metadata.title or entry
+    note.tags = metadata and metadata.tags or {}
 
     for i, tag in ipairs(note.tags) do
       note.tags[i] = '#' .. tag
