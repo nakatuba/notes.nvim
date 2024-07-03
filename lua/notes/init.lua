@@ -7,7 +7,7 @@ local M = {}
 M.config = {}
 
 function M.setup(opts)
-  M.config = vim.tbl_extend('force', M.config, opts or {})
+  M.config = vim.tbl_deep_extend('force', M.config, opts or {})
 end
 
 function M.new_note(opts)
