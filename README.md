@@ -34,11 +34,15 @@ asdf global lua 5.1.5
   },
   config = function()
     require('notes').setup {
-      dir = '~/notes'
+      dir = '~/notes',
+      daily_notes = {
+        dir = '~/notes/daily'
+      }
     }
 
     vim.keymap.set('n', '<leader>nn', require('notes').new_note)
     vim.keymap.set('n', '<leader>no', require('notes').open_note)
+    vim.keymap.set('n', '<leader>nd', require('notes').open_daily_note)
   end
 }
 ```
