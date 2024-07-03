@@ -32,7 +32,7 @@ tags: []
 # Untitled
 ]], datetime)
 
-  vim.cmd.edit(opts.dir .. '/' .. filename)
+  vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
 end
 

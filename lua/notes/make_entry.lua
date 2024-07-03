@@ -23,7 +23,7 @@ function make_entry.gen_from_note(opts)
   return function(entry)
     local note = {}
     note.filename = entry
-    note.path = vim.fn.expand(opts.dir .. '/' .. entry)
+    note.path = vim.fn.expand(vim.fs.joinpath(opts.dir, entry))
 
     local lines = {}
     local in_frontmatter = false
