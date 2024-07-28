@@ -70,13 +70,13 @@ function M.open_daily_note(opts)
     return
   end
 
-  local notes = vim.fn.glob(vim.fs.joinpath(opts.dir, os.date("%Y%m%d*.md")), true, true)
-  for _, note in ipairs(notes) do
-    vim.cmd.edit(note)
+  local filename = os.date("%Y%m%d.md")
+
+  if vim.fn.filereadable(vim.fn.expand(vim.fs.joinpath(opts.dir, filename))) == 1 then
+    vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
     return
   end
 
-  local filename = os.date("%Y%m%d%H%M%S.md")
   local date = os.date("%Y-%m-%d")
   local datetime = os.date("%Y-%m-%d %H:%M:%S")
   local template = string.format([[
