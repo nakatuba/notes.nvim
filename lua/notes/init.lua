@@ -56,11 +56,7 @@ function M.open_note(opts)
     cwd = opts.dir,
     find_command = { 'fd', '-d', '1', '-e', 'md' },
     prompt_title = 'Open Note',
-    entry_maker = make_entry.gen_from_note(opts),
-    attach_mappings = function(_, map)
-      map('i', '<M-n>', actions.new_note)
-      return true
-    end
+    entry_maker = make_entry.gen_from_note(opts)
   }
 end
 
@@ -111,11 +107,7 @@ function M.open_daily_note(opts)
     cwd = opts.dir,
     find_command = { 'fd', '-d', '1', '-e', 'md' },
     prompt_title = 'Open Daily Note',
-    entry_maker = make_entry.gen_from_note(opts),
-    attach_mappings = function(_, map)
-      map('i', '<M-n>', actions.new_daily_note)
-      return true
-    end
+    entry_maker = make_entry.gen_from_note(opts)
   }
 end
 
