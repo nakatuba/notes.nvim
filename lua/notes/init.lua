@@ -54,13 +54,17 @@ function M.open_note(opts)
 
   builtin.find_files {
     cwd = opts.dir,
-    find_command = { 'fd', '-e', 'md' },
+    find_command = { 'fd', '-d', '1', '-e', 'md' },
     prompt_title = 'Open Note',
-    entry_maker = make_entry.gen_from_note(opts)
+    entry_maker = make_entry.gen_from_note(opts),
+    attach_mappings = function(_, map)
+      map('i', '<M-n>', actions.new_note)
+      return true
+    end
   }
 end
 
-function M.open_daily_note(opts)
+function M.new_daily_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.daily_notes.dir
@@ -93,6 +97,28 @@ tags: []
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
 end
 
+function M.open_daily_note(opts)
+  opts = opts or {}
+
+  opts.dir = opts.dir or M.config.daily_notes.dir
+
+  if vim.fn.isdirectory(vim.fn.expand(opts.dir)) == 0 then
+    vim.notify('Directory "' .. opts.dir .. '" does not exist', vim.log.levels.ERROR)
+    return
+  end
+
+  builtin.find_files {
+    cwd = opts.dir,
+    find_command = { 'fd', '-d', '1', '-e', 'md' },
+    prompt_title = 'Open Daily Note',
+    entry_maker = make_entry.gen_from_note(opts),
+    attach_mappings = function(_, map)
+      map('i', '<M-n>', actions.new_daily_note)
+      return true
+    end
+  }
+end
+
 function M.insert_link(opts)
   opts = opts or {}
 
@@ -105,10 +131,10 @@ function M.insert_link(opts)
 
   builtin.find_files {
     cwd = opts.dir,
-    find_command = { 'fd', '-e', 'md' },
+    find_command = { 'fd', '-d', '1', '-e', 'md' },
     prompt_title = 'Insert Link',
     entry_maker = make_entry.gen_from_note(opts),
-    attach_mappings = function(_, _)
+    attach_mappings = function()
       actions.select_default:replace(actions.insert_link)
       return true
     end

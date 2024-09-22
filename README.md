@@ -40,7 +40,6 @@ asdf global lua 5.1.5
       }
     }
 
-    vim.keymap.set('n', '<leader>nn', require('notes').new_note)
     vim.keymap.set('n', '<leader>no', require('notes').open_note)
     vim.keymap.set('n', '<leader>nd', require('notes').open_daily_note)
   end
