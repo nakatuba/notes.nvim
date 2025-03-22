@@ -6,10 +6,7 @@ local M = {}
 
 ---@class Config
 M.config = {
-  dir = '~/notes',
-  daily_notes = {
-    dir = '~/notes/daily'
-  }
+  dir = '~/notes'
 }
 
 function M.setup(opts)
@@ -20,16 +17,24 @@ function M.new_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
-  opts.title = opts.title or vim.fn.input('Title: ')
 
   if vim.fn.isdirectory(vim.fn.expand(opts.dir)) == 0 then
     vim.notify('Directory "' .. opts.dir .. '" does not exist', vim.log.levels.ERROR)
     return
   end
 
-  local filename = os.date("%Y%m%d%H%M%S.md")
-  local datetime = os.date("%Y-%m-%d %H:%M:%S")
-  local template = string.format([[
+  vim.ui.input({ prompt = 'Title: ' }, function(title)
+    if title == nil then
+      return
+    end
+
+    if title == '' then
+      title = 'Untitled'
+    end
+
+    local filename = os.date("%Y%m%d%H%M%S.md")
+    local datetime = os.date("%Y-%m-%d %H:%M:%S")
+    local template = string.format([[
 ---
 title: %s
 date: %s
@@ -37,10 +42,11 @@ tags: []
 ---
 
 # %s
-]], opts.title, datetime, opts.title)
+]], title, datetime, title)
 
-  vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
-  vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
+    vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
+  end)
 end
 
 function M.open_note(opts)
