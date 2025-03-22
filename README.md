@@ -6,31 +6,13 @@
 
 ## Installation
 
-```shell
-asdf plugin add lua
-asdf install lua 5.1.5
-asdf global lua 5.1.5
-```
-
 ### lazy.nvim
-
-```lua
-{
-  'vhyrro/luarocks.nvim',
-  priority = 1000,
-  opts = {
-    rocks = { 'yaml' },
-    luarocks_build_args = { '--with-lua=' .. vim.fn.system('asdf where lua') }
-  }
-}
-```
 
 ```lua
 {
   'nakatuba/notes.nvim',
   dependencies = {
-    'nvim-telescope/telescope.nvim',
-    'vhyrro/luarocks.nvim'
+    'nvim-telescope/telescope.nvim'
   },
   config = function()
     require('notes').setup {
