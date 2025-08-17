@@ -3,6 +3,8 @@
 ## Requirements
 
 - [fd](https://github.com/sharkdp/fd) - A simple, fast and user-friendly alternative to 'find'
+- [jq](https://github.com/jqlang/jq) - Command-line JSON processor
+- [yq](https://github.com/mikefarah/yq) - yq is a portable command-line YAML, JSON, XML, CSV, TOML and properties processor
 
 ## Installation
 
@@ -12,7 +14,7 @@
 {
   'nakatuba/notes.nvim',
   dependencies = {
-    'nvim-telescope/telescope.nvim'
+    'folke/snacks.nvim'
   },
   config = function()
     require('notes').setup {
