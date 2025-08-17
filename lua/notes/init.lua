@@ -4,7 +4,6 @@ local make_entry = require('notes.make_entry')
 
 local M = {}
 
----@class Config
 M.config = {
   dir = '~/notes'
 }
@@ -24,7 +23,7 @@ function M.new_note(opts)
   end
 
   vim.ui.input({ prompt = 'Title: ' }, function(title)
-    if title == nil then
+    if not title then
       return
     end
 
