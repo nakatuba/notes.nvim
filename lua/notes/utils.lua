@@ -23,12 +23,26 @@ fd -d 1 -e md --strip-cwd-prefix \
   for _, note in ipairs(notes) do
     table.insert(items, {
       file = vim.fs.joinpath(cwd, note.path),
-      text = note.title or note.path,
+      text = (note.title or note.path) .. ' ' .. table.concat(note.tags or {}, ' '),
       value = note
     })
   end
 
   return items
+end
+
+function M.format(item)
+  local note = item.value
+  local tags = {}
+  for _, tag in ipairs(note.tags or {}) do
+    table.insert(tags, '#' .. tag)
+  end
+
+  return {
+    { note.title or note.path },
+    { ' ' },
+    { table.concat(tags, ' '), 'Comment' }
+  }
 end
 
 return M
