@@ -57,7 +57,7 @@ function M.open_note(opts)
   require('snacks').picker {
     title = 'Open Note',
     items = utils.get_items(opts.dir),
-    format = 'text'
+    format = utils.format
   }
 end
 
@@ -73,7 +73,7 @@ function M.insert_link(opts)
   require('snacks').picker {
     title = 'Insert Link',
     items = utils.get_items(opts.dir),
-    format = 'text',
+    format = utils.format,
     confirm = function(picker, item)
       picker:close()
       local note = item.value
