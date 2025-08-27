@@ -4,7 +4,7 @@ local M = {}
 
 M.config = {
   dir = '~/notes',
-  daily_notes = {
+  daily = {
     dir = '~/notes/daily'
   }
 }
@@ -67,7 +67,7 @@ end
 function M.new_daily_note(opts)
   opts = opts or {}
 
-  opts.dir = opts.dir or M.config.daily_notes.dir
+  opts.dir = opts.dir or M.config.daily.dir
 
   if not utils.dir_exists(opts.dir) then
     return
