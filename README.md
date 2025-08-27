@@ -19,7 +19,7 @@
   config = function()
     require('notes').setup {
       dir = '~/notes',
-      daily_notes = {
+      daily = {
         dir = '~/notes/daily'
       }
     }
