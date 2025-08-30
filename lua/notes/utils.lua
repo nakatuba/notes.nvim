@@ -41,7 +41,7 @@ function M.format(item)
   return {
     { note.title or note.path },
     { ' ' },
-    { table.concat(tags, ' '), 'Comment' }
+    { table.concat(tags, ' '), 'Special' }
   }
 end
 
