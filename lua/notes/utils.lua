@@ -12,7 +12,7 @@ end
 function M.get_items(dir)
   local cmd = [[
 fd -d 1 -e md --strip-cwd-prefix \
-  -x sh -c 'yq --front-matter=extract -o json {} | jq --arg path {} ". + {path: \$path}"' | \
+  -x sh -c '(head -n 1 {} | grep -q "^---$" && yq --front-matter=extract -o json {} || echo "null") | jq --arg path {} "{path: \$path} + ."' | \
   jq -s 'sort_by(.path)'
 ]]
   local cwd = vim.fn.expand(dir)
