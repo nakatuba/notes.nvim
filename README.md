@@ -18,15 +18,11 @@
   },
   config = function()
     require('notes').setup {
-      dir = '~/notes',
-      daily = {
-        dir = '~/notes/daily'
-      }
+      dir = '~/notes'
     }
 
     vim.keymap.set('n', '<leader>nn', require('notes').new_note)
     vim.keymap.set('n', '<leader>no', require('notes').open_note)
-    vim.keymap.set('n', '<leader>nd', require('notes').new_daily_note)
   end
 }
 ```

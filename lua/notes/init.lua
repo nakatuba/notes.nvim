@@ -3,10 +3,7 @@ local utils = require('notes.utils')
 local M = {}
 
 M.config = {
-  dir = '~/notes',
-  daily = {
-    dir = '~/notes/daily'
-  }
+  dir = '~/notes'
 }
 
 function M.setup(opts)
@@ -68,54 +65,6 @@ function M.open_note(opts)
     items = utils.get_items(opts.dir),
     format = utils.format
   }
-end
-
-function M.new_daily_note(opts)
-  opts = opts or {}
-
-  opts.dir = opts.dir or M.config.daily.dir
-
-  if not utils.dir_exists(opts.dir) then
-    return
-  end
-
-  local filename = os.date("%Y%m%d.md")
-
-  if vim.fn.filereadable(vim.fn.expand(vim.fs.joinpath(opts.dir, filename))) == 1 then
-    vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
-    return
-  end
-
-  local date = os.date("%Y-%m-%d")
-  local datetime = os.date("%Y-%m-%d %H:%M:%S")
-  local template = string.format([[
----
-title: "%s"
-date: %s
-tags: []
----
-
-# %s
-
-## Todo
-
-### Work
-
-### Development
-
-### Private
-
-## 思考アウトプット
-
-### 技術
-
-### マインド
-
-### 行動
-]], date, datetime, date)
-
-  vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
-  vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
 end
 
 function M.insert_link(opts)
