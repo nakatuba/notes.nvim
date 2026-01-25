@@ -9,7 +9,7 @@ function M.dir_exists(dir)
   return true
 end
 
-function M.get_items(dir)
+function M.get_items(dir, types)
   local cmd = [[
 fd -e md --strip-cwd-prefix -x sh -c '
   head -n 1 "$1" | grep -q "^---" &&
@@ -25,11 +25,13 @@ fd -e md --strip-cwd-prefix -x sh -c '
     note.type = vim.fs.dirname(note.path)
     note.title = note.title or vim.fs.basename(note.path)
     note.tags = note.tags or {}
-    table.insert(items, {
-      file = vim.fs.joinpath(cwd, note.path),
-      text = note.type .. ' ' .. note.title .. ' ' .. table.concat(note.tags, ' '),
-      value = note
-    })
+    if vim.tbl_contains(types, note.type) then
+      table.insert(items, {
+        file = vim.fs.joinpath(cwd, note.path),
+        text = note.type .. ' ' .. note.title .. ' ' .. table.concat(note.tags, ' '),
+        value = note
+      })
+    end
   end
 
   return items

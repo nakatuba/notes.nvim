@@ -4,8 +4,9 @@ local M = {}
 
 M.config = {
   dir = '~/notes',
-  types = { 'literature', 'permanent' },
+  types = { 'fleeting', 'literature', 'permanent' },
   highlights = {
+    fleeting = 'Yellow',
     literature = 'Green',
     permanent = 'Blue',
     tags = 'Purple'
@@ -62,6 +63,7 @@ function M.open_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
+  opts.types = opts.types or M.config.types
   opts.highlights = opts.highlights or M.config.highlights
 
   if not utils.dir_exists(opts.dir) then
@@ -70,7 +72,7 @@ function M.open_note(opts)
 
   require('snacks').picker {
     title = 'Open Note',
-    items = utils.get_items(opts.dir),
+    items = utils.get_items(opts.dir, opts.types),
     format = utils.get_format(opts.highlights)
   }
 end
@@ -79,6 +81,7 @@ function M.insert_link(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
+  opts.types = opts.types or M.config.types
   opts.highlights = opts.highlights or M.config.highlights
 
   if not utils.dir_exists(opts.dir) then
@@ -87,7 +90,7 @@ function M.insert_link(opts)
 
   require('snacks').picker {
     title = 'Insert Link',
-    items = utils.get_items(opts.dir),
+    items = utils.get_items(opts.dir, opts.types),
     format = utils.get_format(opts.highlights),
     confirm = function(picker, item)
       picker:close()
