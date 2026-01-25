@@ -35,21 +35,22 @@ fd -e md --strip-cwd-prefix -x sh -c '
   return items
 end
 
-function M.format(item)
-  local a = require('snacks').picker.util.align
-  local note = item.value
-  local type_hl = { literature = 'Green', permanent = 'Blue' }
-  local tags = {}
-  for _, tag in ipairs(note.tags) do
-    table.insert(tags, '#' .. tag)
-  end
+function M.get_format(highlights)
+  return function(item)
+    local a = require('snacks').picker.util.align
+    local note = item.value
+    local tags = {}
+    for _, tag in ipairs(note.tags) do
+      table.insert(tags, '#' .. tag)
+    end
 
-  return {
-    { a(note.type, 12), type_hl[note.type] },
-    { note.title },
-    { ' ' },
-    { table.concat(tags, ' '), 'Purple' }
-  }
+    return {
+      { a(note.type, 12), highlights[note.type] },
+      { note.title },
+      { ' ' },
+      { table.concat(tags, ' '), highlights.tags }
+    }
+  end
 end
 
 function M.get_relative_path(from_dir, to_path)

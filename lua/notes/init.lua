@@ -3,7 +3,13 @@ local utils = require('notes.utils')
 local M = {}
 
 M.config = {
-  dir = '~/notes'
+  dir = '~/notes',
+  types = { 'literature', 'permanent' },
+  highlights = {
+    literature = 'Green',
+    permanent = 'Blue',
+    tags = 'Purple'
+  }
 }
 
 function M.setup(opts)
@@ -14,12 +20,13 @@ function M.new_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
+  opts.types = opts.types or M.config.types
 
   if not utils.dir_exists(opts.dir) then
     return
   end
 
-  vim.ui.select({ 'literature', 'permanent' }, { prompt = 'Type: ' }, function(type)
+  vim.ui.select(opts.types, { prompt = 'Type: ' }, function(type)
     if not type then
       return
     end
@@ -55,6 +62,7 @@ function M.open_note(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
+  opts.highlights = opts.highlights or M.config.highlights
 
   if not utils.dir_exists(opts.dir) then
     return
@@ -63,7 +71,7 @@ function M.open_note(opts)
   require('snacks').picker {
     title = 'Open Note',
     items = utils.get_items(opts.dir),
-    format = utils.format
+    format = utils.get_format(opts.highlights)
   }
 end
 
@@ -71,6 +79,7 @@ function M.insert_link(opts)
   opts = opts or {}
 
   opts.dir = opts.dir or M.config.dir
+  opts.highlights = opts.highlights or M.config.highlights
 
   if not utils.dir_exists(opts.dir) then
     return
@@ -79,7 +88,7 @@ function M.insert_link(opts)
   require('snacks').picker {
     title = 'Insert Link',
     items = utils.get_items(opts.dir),
-    format = utils.format,
+    format = utils.get_format(opts.highlights),
     confirm = function(picker, item)
       picker:close()
       local note = item.value
