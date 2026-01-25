@@ -130,7 +130,7 @@ function M.insert_link(opts)
       local note = item.value
       vim.schedule(function()
         vim.cmd.startinsert()
-        vim.api.nvim_put({ '[' .. item.text .. '](' .. note.path .. ')' }, '', true, true)
+        vim.api.nvim_put({ '[' .. note.title .. '](' .. note.path .. ')' }, '', true, true)
       end)
     end
   }

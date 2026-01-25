@@ -2,7 +2,7 @@ local M = {}
 
 function M.dir_exists(dir)
   if vim.fn.isdirectory(vim.fn.expand(dir)) == 0 then
-    vim.notify('Directory "' .. dir .. '" does not exist', vim.log.levels.ERROR)
+    vim.notify('Directory does not exist: ' .. dir, vim.log.levels.ERROR)
     return false
   end
 
@@ -11,9 +11,10 @@ end
 
 function M.get_items(dir)
   local cmd = [[
-fd -d 1 -e md --strip-cwd-prefix \
-  -x sh -c '(head -n 1 {} | grep -q "^---$" && yq --front-matter=extract -o json {} || echo "null") | jq --arg path {} "{path: \$path} + ."' | \
-  jq -s 'sort_by(.path)'
+fd -e md --strip-cwd-prefix -x sh -c '
+  head -n 1 "$1" | grep -q "^---" &&
+  yq --front-matter=extract -o json "$1" | jq --arg path $1 "{path: \$path} + ."
+' _ {} | jq -s 'sort_by(.path)'
 ]]
   local cwd = vim.fn.expand(dir)
   local obj = vim.system({ 'sh', '-c', cmd }, { cwd = cwd, text = true }):wait()
@@ -21,9 +22,12 @@ fd -d 1 -e md --strip-cwd-prefix \
 
   local items = {}
   for _, note in ipairs(notes) do
+    note.type = vim.fs.dirname(note.path)
+    note.title = note.title or vim.fs.basename(note.path)
+    note.tags = note.tags or {}
     table.insert(items, {
       file = vim.fs.joinpath(cwd, note.path),
-      text = (note.title or note.path) .. ' ' .. table.concat(note.tags or {}, ' '),
+      text = note.type .. ' ' .. note.title .. ' ' .. table.concat(note.tags, ' '),
       value = note
     })
   end
@@ -32,16 +36,19 @@ fd -d 1 -e md --strip-cwd-prefix \
 end
 
 function M.format(item)
+  local a = require('snacks').picker.util.align
   local note = item.value
+  local type_hl = { literature = 'Green', permanent = 'Blue' }
   local tags = {}
-  for _, tag in ipairs(note.tags or {}) do
+  for _, tag in ipairs(note.tags) do
     table.insert(tags, '#' .. tag)
   end
 
   return {
-    { note.title or note.path },
+    { a(note.type, 12), type_hl[note.type] },
+    { note.title },
     { ' ' },
-    { table.concat(tags, ' '), 'Special' }
+    { table.concat(tags, ' '), 'Purple' }
   }
 end
 
