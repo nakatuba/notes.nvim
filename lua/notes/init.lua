@@ -128,9 +128,12 @@ function M.insert_link(opts)
     confirm = function(picker, item)
       picker:close()
       local note = item.value
+      local current_dir = vim.fn.resolve(vim.fn.expand('%:p:h'))
+      local target_path = vim.fn.resolve(item.file)
+      local relative_path = utils.get_relative_path(current_dir, target_path)
       vim.schedule(function()
         vim.cmd.startinsert()
-        vim.api.nvim_put({ '[' .. note.title .. '](' .. note.path .. ')' }, '', true, true)
+        vim.api.nvim_put({ '[' .. note.title .. '](' .. relative_path .. ')' }, '', true, true)
       end)
     end
   }
