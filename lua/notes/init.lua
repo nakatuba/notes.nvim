@@ -22,18 +22,23 @@ function M.new_note(opts)
     return
   end
 
-  vim.ui.input({ prompt = 'Title: ' }, function(title)
-    if not title then
+  vim.ui.select({ 'literature', 'permanent' }, { prompt = 'Type: ' }, function(type)
+    if not type then
       return
     end
 
-    if title == '' then
-      title = 'Untitled'
-    end
+    vim.ui.input({ prompt = 'Title: ' }, function(title)
+      if not title then
+        return
+      end
 
-    local filename = os.date("%Y%m%d%H%M%S.md")
-    local datetime = os.date("%Y-%m-%d %H:%M:%S")
-    local template = string.format([[
+      if title == '' then
+        title = 'Untitled'
+      end
+
+      local filename = os.date("%Y%m%d%H%M%S.md")
+      local datetime = os.date("%Y-%m-%d %H:%M:%S")
+      local template = string.format([[
 ---
 title: %s
 date: %s
@@ -43,8 +48,9 @@ tags: []
 # %s
 ]], title, datetime, title)
 
-    vim.cmd.edit(vim.fs.joinpath(opts.dir, filename))
-    vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
+      vim.cmd.edit(vim.fs.joinpath(opts.dir, type, filename))
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(template, '\n', { trimempty = true }))
+    end)
   end)
 end
 
